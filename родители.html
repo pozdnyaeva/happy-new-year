@@ -335,13 +335,13 @@
             }
             
             .photos-strip {
-                max-width: 120px;
-                width: 120px;
+                max-width: 100px;
+                width: 100px;
             }
             
             .photos-strip img {
-                width: 120px;
-                height: 96px; /* 5:4 соотношение (120 * 4/5 = 96) */
+                width: 100px;
+                height: 80px; /* 5:4 соотношение (100 * 4/5 = 80) */
                 object-fit: cover;
             }
             
@@ -1717,13 +1717,37 @@
             if (!video || !canvas) return;
 
             const ctx = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            
+            // Определяем соотношение сторон для мобильных (5:4) или десктоп (4:3)
+            const screenWidth = window.innerWidth;
+            const isMobile = screenWidth <= 768;
+            const targetAspectRatio = isMobile ? 5/4 : 4/3;
+            
+            // Вычисляем размеры с нужным соотношением сторон
+            let outputWidth, outputHeight;
+            const videoAspectRatio = video.videoWidth / video.videoHeight;
+            
+            if (videoAspectRatio > targetAspectRatio) {
+                // Видео шире - обрезаем по ширине
+                outputHeight = video.videoHeight;
+                outputWidth = video.videoHeight * targetAspectRatio;
+            } else {
+                // Видео выше - обрезаем по высоте
+                outputWidth = video.videoWidth;
+                outputHeight = video.videoWidth / targetAspectRatio;
+            }
+            
+            // Центрируем обрезку
+            const sourceX = (video.videoWidth - outputWidth) / 2;
+            const sourceY = (video.videoHeight - outputHeight) / 2;
+            
+            canvas.width = outputWidth;
+            canvas.height = outputHeight;
 
-            // Зеркалим изображение
+            // Зеркалим и обрезаем изображение
             ctx.translate(canvas.width, 0);
             ctx.scale(-1, 1);
-            ctx.drawImage(video, 0, 0);
+            ctx.drawImage(video, sourceX, sourceY, outputWidth, outputHeight, 0, 0, outputWidth, outputHeight);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
 
             // Flash эффект
@@ -2017,19 +2041,19 @@
             const screenWidth = window.innerWidth;
             
             if (screenWidth <= 480) {
-                displayWidth = 120; // Уменьшено с 140
-                displayHeight = 96; /* 5:4 соотношение (120 * 4/5 = 96) */
+                displayWidth = 100; // Еще уменьшено для телефонов
+                displayHeight = 80; /* 5:4 соотношение (100 * 4/5 = 80) */
             } else if (screenWidth <= 768) {
-                displayWidth = 150; // Уменьшено с 180
-                displayHeight = 120; /* 5:4 соотношение (150 * 4/5 = 120) */
+                displayWidth = 130; // Еще уменьшено для планшетов
+                displayHeight = 104; /* 5:4 соотношение (130 * 4/5 = 104) */
             } else {
                 displayWidth = 200;
                 displayHeight = 150; /* Десктоп остается 4:3 */
             }
             
             // Для сохранения используем увеличенное разрешение для лучшего качества
-            // На мобильных используем меньший scale, чтобы файл был меньше
-            const scale = screenWidth <= 768 ? 2.0 : 2.5;
+            // На мобильных используем меньший scale, чтобы файл был меньше и помещался на экране
+            const scale = screenWidth <= 480 ? 1.5 : screenWidth <= 768 ? 1.8 : 2.5;
             const photoWidth = displayWidth * scale;
             const photoHeight = displayHeight * scale;
             const gap = 3 * scale;
