@@ -2058,8 +2058,8 @@
             }
             
             // Для сохранения используем увеличенное разрешение для лучшего качества
-            // На мобильных используем меньший scale, чтобы файл был меньше и помещался на экране
-            const scale = screenWidth <= 480 ? 1.5 : screenWidth <= 768 ? 1.8 : 2.5;
+            // Увеличено для улучшения качества, но остается компактным для мобильных
+            const scale = screenWidth <= 480 ? 2.5 : screenWidth <= 768 ? 3.0 : 3.5;
             const photoWidth = displayWidth * scale;
             const photoHeight = displayHeight * scale;
             const gap = 3 * scale;
@@ -2083,8 +2083,13 @@
             let loadedCount = 0;
             pbPhotos.forEach((photo, index) => {
                 const img = new Image();
+                // Улучшаем качество загрузки изображения
+                img.crossOrigin = 'anonymous';
                 img.onload = () => {
                     const y = index * (photoHeight + gap);
+                    
+                    // Сохраняем текущее состояние контекста
+                    ctx.save();
                     
                     // Рисуем рамку (белая с тенью)
                     ctx.fillStyle = '#ffffff';
@@ -2096,14 +2101,17 @@
                     ctx.shadowOffsetX = 0;
                     ctx.shadowOffsetY = 2 * scale;
                     
-                    // Рисуем фото с отступом для рамки
-                    ctx.drawImage(img, borderWidth, y, photoWidth - borderWidth * 2, photoHeight - borderWidth * 2);
+                    // Рисуем фото с отступом для рамки с улучшенным качеством
+                    // Используем целочисленные координаты для четкости
+                    const drawX = Math.round(borderWidth);
+                    const drawY = Math.round(y);
+                    const drawWidth = Math.round(photoWidth - borderWidth * 2);
+                    const drawHeight = Math.round(photoHeight - borderWidth * 2);
                     
-                    // Убираем тень
-                    ctx.shadowColor = 'transparent';
-                    ctx.shadowBlur = 0;
-                    ctx.shadowOffsetX = 0;
-                    ctx.shadowOffsetY = 0;
+                    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+                    
+                    // Восстанавливаем состояние контекста
+                    ctx.restore();
                     
                     loadedCount++;
                     
@@ -2120,8 +2128,8 @@
                         ctx.fillText('Happy New Year', collageCanvas.width / 2, textY1);
                         ctx.fillText('2026', collageCanvas.width / 2, textY2);
                         
-                        // Сохраняем как JPEG с максимальным качеством
-                        const jpegData = collageCanvas.toDataURL('image/jpeg', 1.0);
+                        // Сохраняем как JPEG с максимальным качеством (0.98 для лучшего баланса размера/качества)
+                        const jpegData = collageCanvas.toDataURL('image/jpeg', 0.98);
                         
                         // Скачиваем файл с именем начинающимся с happynewyear
                         const link = document.createElement('a');
