@@ -260,13 +260,13 @@
             }
             
             .photos-strip {
-                max-width: 180px;
-                width: 180px;
+                max-width: 160px;
+                width: 160px;
             }
             
             .photos-strip img {
-                width: 180px;
-                height: 144px; /* 5:4 соотношение (180 * 4/5 = 144) */
+                width: 160px;
+                height: 128px; /* 5:4 соотношение (160 * 4/5 = 128) */
                 object-fit: cover;
             }
             
@@ -335,13 +335,13 @@
             }
             
             .photos-strip {
-                max-width: 140px;
-                width: 140px;
+                max-width: 120px;
+                width: 120px;
             }
             
             .photos-strip img {
-                width: 140px;
-                height: 112px; /* 5:4 соотношение (140 * 4/5 = 112) */
+                width: 120px;
+                height: 96px; /* 5:4 соотношение (120 * 4/5 = 96) */
                 object-fit: cover;
             }
             
@@ -2032,23 +2032,26 @@
             const screenWidth = window.innerWidth;
             
             if (screenWidth <= 480) {
-                displayWidth = 140;
-                displayHeight = 112; /* 5:4 соотношение (140 * 4/5 = 112) */
+                // Телефоны - уменьшаем размер для лучшего отображения на экране
+                displayWidth = 120;
+                displayHeight = 96; /* 5:4 соотношение (120 * 4/5 = 96) */
             } else if (screenWidth <= 768) {
-                displayWidth = 180;
-                displayHeight = 144; /* 5:4 соотношение (180 * 4/5 = 144) */
+                // Планшеты
+                displayWidth = 160;
+                displayHeight = 128; /* 5:4 соотношение (160 * 4/5 = 128) */
             } else {
                 displayWidth = 200;
                 displayHeight = 150; /* Десктоп остается 4:3 */
             }
             
-            // Для сохранения используем увеличенное разрешение (в 2.5 раза) для лучшего качества
-            const scale = 2.5;
+            // Для сохранения используем увеличенное разрешение (в 2 раза для мобильных, 2.5 для десктопа)
+            const scale = (screenWidth <= 768) ? 2.0 : 2.5;
             const photoWidth = displayWidth * scale;
             const photoHeight = displayHeight * scale;
             const gap = 3 * scale;
-            const textHeight = (screenWidth <= 480 ? 40 : screenWidth <= 768 ? 45 : 50) * scale;
-            const fontSize = (screenWidth <= 480 ? 12 : screenWidth <= 768 ? 14 : 16) * scale;
+            // Увеличиваем textHeight для мобильных, чтобы текст не накладывался
+            const textHeight = (screenWidth <= 480 ? 50 : screenWidth <= 768 ? 55 : 50) * scale;
+            const fontSize = (screenWidth <= 480 ? 11 : screenWidth <= 768 ? 13 : 16) * scale;
             
             collageCanvas.width = photoWidth;
             collageCanvas.height = (photoHeight * 4) + (gap * 3) + textHeight;
@@ -2075,8 +2078,11 @@
                         ctx.fillStyle = '#d4af37';
                         ctx.font = `200 ${fontSize}px "Playpen Sans", sans-serif`;
                         ctx.textAlign = 'center';
-                        const textY1 = collageCanvas.height - (textHeight / 2 + 5);
-                        const textY2 = collageCanvas.height - (textHeight / 2 - 15);
+                        ctx.textBaseline = 'middle';
+                        // Правильное позиционирование текста, чтобы не накладывался
+                        const lineHeight = fontSize * 1.4;
+                        const textY1 = collageCanvas.height - textHeight + (textHeight / 3);
+                        const textY2 = collageCanvas.height - textHeight + (textHeight / 3 * 2);
                         ctx.fillText('Happy New Year', collageCanvas.width / 2, textY1);
                         ctx.fillText('2026', collageCanvas.width / 2, textY2);
                         
