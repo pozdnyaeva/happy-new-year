@@ -1709,10 +1709,8 @@
 
             const ctx = canvas.getContext('2d');
             
-            // Определяем соотношение сторон для мобильных (5:4) или десктоп (4:3)
-            const screenWidth = window.innerWidth;
-            const isMobile = screenWidth <= 768;
-            const targetAspectRatio = isMobile ? 5/4 : 4/3;
+            // Все устройства - соотношение 4:3
+            const targetAspectRatio = 4/3;
             
             // Вычисляем размеры с нужным соотношением сторон
             let outputWidth, outputHeight;
