@@ -1702,13 +1702,43 @@
             if (!video || !canvas) return;
 
             const ctx = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            
+            // Определяем соотношение сторон для мобильных (5:4) или десктоп (оригинальное)
+            const screenWidth = window.innerWidth;
+            const isMobile = screenWidth <= 768;
+            const targetAspectRatio = isMobile ? 5/4 : video.videoWidth / video.videoHeight;
+            
+            let outputWidth, outputHeight;
+            let sourceX = 0, sourceY = 0;
+            
+            if (isMobile) {
+                // Для мобильных обрезаем до соотношения 5:4
+                const videoAspectRatio = video.videoWidth / video.videoHeight;
+                
+                if (videoAspectRatio > targetAspectRatio) {
+                    // Видео шире - обрезаем по ширине
+                    outputHeight = video.videoHeight;
+                    outputWidth = video.videoHeight * targetAspectRatio;
+                    sourceX = (video.videoWidth - outputWidth) / 2;
+                } else {
+                    // Видео выше - обрезаем по высоте
+                    outputWidth = video.videoWidth;
+                    outputHeight = video.videoWidth / targetAspectRatio;
+                    sourceY = (video.videoHeight - outputHeight) / 2;
+                }
+            } else {
+                // Для десктопа используем полное разрешение
+                outputWidth = video.videoWidth;
+                outputHeight = video.videoHeight;
+            }
+            
+            canvas.width = outputWidth;
+            canvas.height = outputHeight;
 
-            // Зеркалим изображение
+            // Зеркалим изображение и обрезаем до нужного соотношения
             ctx.translate(canvas.width, 0);
             ctx.scale(-1, 1);
-            ctx.drawImage(video, 0, 0);
+            ctx.drawImage(video, sourceX, sourceY, outputWidth, outputHeight, 0, 0, outputWidth, outputHeight);
             ctx.setTransform(1, 0, 0, 1, 0, 0);
 
             // Flash эффект
