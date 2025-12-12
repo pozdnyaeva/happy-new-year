@@ -266,7 +266,7 @@
             
             .photos-strip img {
                 width: 180px;
-                height: 135px;
+                height: 144px; /* 5:4 соотношение (180 * 4/5 = 144) */
                 object-fit: cover;
             }
             
@@ -341,7 +341,7 @@
             
             .photos-strip img {
                 width: 140px;
-                height: 105px;
+                height: 112px; /* 5:4 соотношение (140 * 4/5 = 112) */
                 object-fit: cover;
             }
             
@@ -1809,14 +1809,38 @@
             const canvas = document.getElementById('pb-canvas');
             const ctx = canvas.getContext('2d');
             const contrastFactor = 1.2;
+            
+            // Определяем соотношение сторон для мобильных (5:4) или десктоп (4:3)
+            const screenWidth = window.innerWidth;
+            const isMobile = screenWidth <= 768;
+            const targetAspectRatio = isMobile ? 5/4 : 4/3; // 5:4 для мобильных, 4:3 для десктопа
 
             for (let idx = 0; idx < pbPhotosRaw.length; idx++) {
                 const raw = pbPhotosRaw[idx];
                 const img = await loadImage(raw);
-                canvas.width = img.width;
-                canvas.height = img.height;
+                
+                // Вычисляем размеры с нужным соотношением сторон
+                let outputWidth, outputHeight;
+                const imgAspectRatio = img.width / img.height;
+                
+                if (imgAspectRatio > targetAspectRatio) {
+                    // Изображение шире - обрезаем по ширине
+                    outputHeight = img.height;
+                    outputWidth = img.height * targetAspectRatio;
+                } else {
+                    // Изображение выше - обрезаем по высоте
+                    outputWidth = img.width;
+                    outputHeight = img.width / targetAspectRatio;
+                }
+                
+                // Центрируем обрезку
+                const sourceX = (img.width - outputWidth) / 2;
+                const sourceY = (img.height - outputHeight) / 2;
+                
+                canvas.width = outputWidth;
+                canvas.height = outputHeight;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
+                ctx.drawImage(img, sourceX, sourceY, outputWidth, outputHeight, 0, 0, outputWidth, outputHeight);
 
                 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 const data = imageData.data;
@@ -1979,13 +2003,13 @@
             
             if (screenWidth <= 480) {
                 displayWidth = 140;
-                displayHeight = 105;
+                displayHeight = 112; /* 5:4 соотношение (140 * 4/5 = 112) */
             } else if (screenWidth <= 768) {
                 displayWidth = 180;
-                displayHeight = 135;
+                displayHeight = 144; /* 5:4 соотношение (180 * 4/5 = 144) */
             } else {
                 displayWidth = 200;
-                displayHeight = 150;
+                displayHeight = 150; /* Десктоп остается 4:3 */
             }
             
             // Для сохранения используем увеличенное разрешение (в 2.5 раза) для лучшего качества
