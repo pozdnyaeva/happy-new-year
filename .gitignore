@@ -1,0 +1,23 @@
+# macOS служебные файлы
+._*
+.DS_Store
+
+# Временные файлы
+*.tmp
+*.bak
+*~
+
+# IDE файлы
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Дубликаты шрифтов (используется только static/PlaypenSans-ExtraLight.ttf)
+Playpen_Sans/
+PlaypenSans-VariableFont_wght.ttf
+static/PlaypenSans-*.ttf
+!static/PlaypenSans-ExtraLight.ttf
+OFL.txt
+README.txt
+
