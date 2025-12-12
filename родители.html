@@ -266,7 +266,7 @@
             
             .photos-strip img {
                 width: 130px;
-                height: 104px; /* 5:4 соотношение (130 * 4/5 = 104) */
+                height: 98px; /* 4:3 соотношение (130 * 3/4 = 97.5, округляем до 98) */
                 object-fit: cover;
             }
             
@@ -341,7 +341,7 @@
             
             .photos-strip img {
                 width: 100px;
-                height: 80px; /* 5:4 соотношение (100 * 4/5 = 80) */
+                height: 75px; /* 4:3 соотношение (100 * 3/4 = 75) */
                 object-fit: cover;
             }
             
@@ -1591,21 +1591,12 @@
             const screenWidth = window.innerWidth;
             let videoConstraints;
             
-            if (screenWidth <= 768) {
-                // Мобильные устройства - соотношение 5:4
-                videoConstraints = {
-                    facingMode: 'user',
-                    width: { ideal: 640 },
-                    height: { ideal: 512 } // 640 * 4/5 = 512 (соотношение 5:4)
-                };
-            } else {
-                // Десктоп - соотношение 4:3
-                videoConstraints = {
-                    facingMode: 'user',
-                    width: { ideal: 640 },
-                    height: { ideal: 480 }
-                };
-            }
+            // Все устройства - соотношение 4:3
+            videoConstraints = {
+                facingMode: 'user',
+                width: { ideal: 640 },
+                height: { ideal: 480 } // 640 * 3/4 = 480 (соотношение 4:3)
+            };
             
             navigator.mediaDevices.getUserMedia({ 
                 video: videoConstraints
@@ -1849,10 +1840,8 @@
             const ctx = canvas.getContext('2d');
             const contrastFactor = 1.2;
             
-            // Определяем соотношение сторон для мобильных (5:4) или десктоп (4:3)
-            const screenWidth = window.innerWidth;
-            const isMobile = screenWidth <= 768;
-            const targetAspectRatio = isMobile ? 5/4 : 4/3; // 5:4 для мобильных, 4:3 для десктопа
+            // Все устройства - соотношение 4:3
+            const targetAspectRatio = 4/3;
 
             for (let idx = 0; idx < pbPhotosRaw.length; idx++) {
                 const raw = pbPhotosRaw[idx];
@@ -2041,14 +2030,14 @@
             const screenWidth = window.innerWidth;
             
             if (screenWidth <= 480) {
-                displayWidth = 100; // Еще уменьшено для телефонов
-                displayHeight = 80; /* 5:4 соотношение (100 * 4/5 = 80) */
+                displayWidth = 100; // Для телефонов
+                displayHeight = 75; /* 4:3 соотношение (100 * 3/4 = 75) */
             } else if (screenWidth <= 768) {
-                displayWidth = 130; // Еще уменьшено для планшетов
-                displayHeight = 104; /* 5:4 соотношение (130 * 4/5 = 104) */
+                displayWidth = 130; // Для планшетов
+                displayHeight = 98; /* 4:3 соотношение (130 * 3/4 = 97.5, округляем до 98) */
             } else {
                 displayWidth = 200;
-                displayHeight = 150; /* Десктоп остается 4:3 */
+                displayHeight = 150; /* Десктоп 4:3 */
             }
             
             // Для сохранения используем увеличенное разрешение для лучшего качества
