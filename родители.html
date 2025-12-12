@@ -521,6 +521,17 @@
             justify-content: center;
             transition: all 0.3s ease;
             z-index: 1001;
+            line-height: 1;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .modal-close::before {
+            content: '×';
+            display: block;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
         }
 
         .modal-close:hover {
@@ -741,6 +752,14 @@
             height: auto;
             display: block;
             transform: scaleX(-1); /* Зеркальное отражение */
+            aspect-ratio: 4 / 3; /* Фиксированное соотношение сторон 4:3 */
+            object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+            .camera-container video {
+                aspect-ratio: 4 / 3; /* 4:3 для мобильных */
+            }
         }
 
         /* Оверлей отсчёта */
