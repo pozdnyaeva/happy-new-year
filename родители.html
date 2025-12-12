@@ -54,11 +54,13 @@
             body {
                 overflow-x: hidden;
                 overflow-y: hidden;
+                background: radial-gradient(circle at top, #1f2937 0%, #020617 55%, #000 100%) !important;
             }
             
             html {
                 overflow: hidden;
                 height: 100%;
+                background: radial-gradient(circle at top, #1f2937 0%, #020617 55%, #000 100%) !important;
             }
         }
 
@@ -197,13 +199,13 @@
             }
             
             .start-title {
-                font-size: 1.2rem !important;
+                font-size: 1.1rem !important;
                 padding: 0 10px;
                 line-height: 1.3 !important;
             }
             
             .start-text {
-                font-size: 0.95rem !important;
+                font-size: 0.85rem !important;
                 padding: 0 10px;
                 line-height: 1.4 !important;
             }
@@ -259,6 +261,13 @@
             
             .photos-strip {
                 max-width: 180px;
+                width: 180px;
+            }
+            
+            .photos-strip img {
+                width: 180px;
+                height: 135px;
+                object-fit: cover;
             }
             
             .photos-buttons {
@@ -304,13 +313,13 @@
             }
             
             .start-title {
-                font-size: 1rem !important;
+                font-size: 0.95rem !important;
                 padding: 0 8px;
                 line-height: 1.2 !important;
             }
             
             .start-text {
-                font-size: 0.85rem !important;
+                font-size: 0.75rem !important;
                 padding: 0 8px;
                 line-height: 1.3 !important;
             }
@@ -326,6 +335,13 @@
             
             .photos-strip {
                 max-width: 140px;
+                width: 140px;
+            }
+            
+            .photos-strip img {
+                width: 140px;
+                height: 105px;
+                object-fit: cover;
             }
             
             .photos-strip-text {
@@ -1185,8 +1201,16 @@
                 0 0 10px rgba(255, 255, 255, 0.8),
                 0 0 20px rgba(255, 255, 255, 0.6),
                 2px 2px 4px rgba(0, 0, 0, 0.5);
-            white-space: nowrap;
+            white-space: normal;
+            text-align: center;
             animation: hintBounce 2s ease-in-out infinite;
+        }
+        
+        @media (max-width: 768px) {
+            .hint-text {
+                font-size: 1rem;
+                line-height: 1.3;
+            }
         }
 
         @keyframes hintBounce {
@@ -1222,7 +1246,7 @@
     <div class="snow" id="snow-layer"></div>
 
     <!-- Заголовок -->
-    <h1 class="title">С новым годом,<br>любимки!</h1>
+    <h1 class="title">С новым годом, любимки!</h1>
 
     <!-- Сцена с ёлкой и подарками -->
     <div class="scene">
@@ -1236,7 +1260,7 @@
             <div class="gift" onclick="openModal(1)">
                 <!-- Детская подсказка -->
                 <div class="hint-box">
-                    <div class="hint-text">жмите на подарочки</div>
+                    <div class="hint-text">жмите на<br>подарочки</div>
                     <div class="arrow-to-gift">
                         <img src="4.png" alt="Стрелка" loading="lazy">
                     </div>
@@ -1948,11 +1972,31 @@
             const collageCanvas = document.getElementById('pb-collage-canvas');
             const ctx = collageCanvas.getContext('2d');
             
-            // Размеры для вертикального коллажа (точно как на экране)
-            const photoWidth = 200;
-            const photoHeight = 150;
+            // Определяем размеры в зависимости от размера экрана (как на экране)
+            let photoWidth, photoHeight, textHeight, fontSize;
+            const screenWidth = window.innerWidth;
+            
+            if (screenWidth <= 480) {
+                // Телефоны - как на экране (140px)
+                photoWidth = 140;
+                photoHeight = 105; // соотношение 4:3
+                textHeight = 40;
+                fontSize = 12;
+            } else if (screenWidth <= 768) {
+                // Планшеты - как на экране (180px)
+                photoWidth = 180;
+                photoHeight = 135; // соотношение 4:3
+                textHeight = 45;
+                fontSize = 14;
+            } else {
+                // Десктоп
+                photoWidth = 200;
+                photoHeight = 150;
+                textHeight = 50;
+                fontSize = 16;
+            }
+            
             const gap = 3;
-            const textHeight = 50; // Увеличили пространство для текста
             
             collageCanvas.width = photoWidth;
             collageCanvas.height = (photoHeight * 4) + (gap * 3) + textHeight;
@@ -1973,10 +2017,12 @@
                     if (loadedCount === pbPhotos.length) {
                         // Добавляем текст "Happy New Year" и "2026" на новом абзаце
                         ctx.fillStyle = '#d4af37';
-                        ctx.font = '200 16px "Playpen Sans", sans-serif';
+                        ctx.font = `200 ${fontSize}px "Playpen Sans", sans-serif`;
                         ctx.textAlign = 'center';
-                        ctx.fillText('Happy New Year', collageCanvas.width / 2, collageCanvas.height - 30);
-                        ctx.fillText('2026', collageCanvas.width / 2, collageCanvas.height - 10);
+                        const textY1 = collageCanvas.height - (textHeight / 2 + 5);
+                        const textY2 = collageCanvas.height - (textHeight / 2 - 15);
+                        ctx.fillText('Happy New Year', collageCanvas.width / 2, textY1);
+                        ctx.fillText('2026', collageCanvas.width / 2, textY2);
                         
                         // Сохраняем как JPEG
                         const jpegData = collageCanvas.toDataURL('image/jpeg', 0.9);
