@@ -1973,34 +1973,35 @@
             const collageCanvas = document.getElementById('pb-collage-canvas');
             const ctx = collageCanvas.getContext('2d');
             
-            // Определяем размеры в зависимости от размера экрана (как на экране)
-            let photoWidth, photoHeight, textHeight, fontSize;
+            // Определяем размеры для отображения на экране
+            let displayWidth, displayHeight;
             const screenWidth = window.innerWidth;
             
             if (screenWidth <= 480) {
-                // Телефоны - как на экране (140px)
-                photoWidth = 140;
-                photoHeight = 105; // соотношение 4:3
-                textHeight = 40;
-                fontSize = 12;
+                displayWidth = 140;
+                displayHeight = 105;
             } else if (screenWidth <= 768) {
-                // Планшеты - как на экране (180px)
-                photoWidth = 180;
-                photoHeight = 135; // соотношение 4:3
-                textHeight = 45;
-                fontSize = 14;
+                displayWidth = 180;
+                displayHeight = 135;
             } else {
-                // Десктоп
-                photoWidth = 200;
-                photoHeight = 150;
-                textHeight = 50;
-                fontSize = 16;
+                displayWidth = 200;
+                displayHeight = 150;
             }
             
-            const gap = 3;
+            // Для сохранения используем увеличенное разрешение (в 2.5 раза) для лучшего качества
+            const scale = 2.5;
+            const photoWidth = displayWidth * scale;
+            const photoHeight = displayHeight * scale;
+            const gap = 3 * scale;
+            const textHeight = (screenWidth <= 480 ? 40 : screenWidth <= 768 ? 45 : 50) * scale;
+            const fontSize = (screenWidth <= 480 ? 12 : screenWidth <= 768 ? 14 : 16) * scale;
             
             collageCanvas.width = photoWidth;
             collageCanvas.height = (photoHeight * 4) + (gap * 3) + textHeight;
+            
+            // Включаем сглаживание для лучшего качества
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
 
             // Белый фон
             ctx.fillStyle = '#fff';
@@ -2025,8 +2026,8 @@
                         ctx.fillText('Happy New Year', collageCanvas.width / 2, textY1);
                         ctx.fillText('2026', collageCanvas.width / 2, textY2);
                         
-                        // Сохраняем как JPEG
-                        const jpegData = collageCanvas.toDataURL('image/jpeg', 0.9);
+                        // Сохраняем как JPEG с максимальным качеством
+                        const jpegData = collageCanvas.toDataURL('image/jpeg', 1.0);
                         
                         // Скачиваем файл с именем начинающимся с happynewyear
                         const link = document.createElement('a');
