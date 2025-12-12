@@ -49,6 +49,16 @@
             overflow-y: auto;
             font-family: 'Marck Script', cursive;
         }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+                overflow-y: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+        }
 
         /* СНЕГ */
         .snow {
@@ -162,31 +172,53 @@
             }
             
             .hint-box {
-                top: -50px;
-                left: -120px;
-            }
-            
-            .hint-text {
-                font-size: 1rem;
-            }
-            
-            .arrow-to-gift {
-                width: 60px;
-                height: 40px;
+                display: none; /* Скрываем подсказку на мобильных */
             }
 
             .modal-content {
-                padding: 25px 20px;
+                padding: 20px 15px;
                 max-width: 95%;
-                max-height: 90vh;
+                max-height: 95vh;
+                overflow-y: auto;
             }
 
             .modal-title {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                padding: 0 10px;
             }
 
             .modal-body {
-                font-size: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .start-title {
+                font-size: 1.2rem !important;
+                padding: 0 10px;
+                line-height: 1.3 !important;
+            }
+            
+            .start-text {
+                font-size: 0.95rem !important;
+                padding: 0 10px;
+                line-height: 1.4 !important;
+            }
+            
+            .photobooth-start-screen {
+                padding: 20px 10px !important;
+            }
+            
+            .start-heart {
+                font-size: 1.5rem !important;
+                margin: 10px 0 !important;
+            }
+            
+            .coin-toss-container {
+                margin-top: 15px;
+            }
+            
+            .coin-svg-toss {
+                width: 60px;
+                height: 60px;
             }
 
             .photobooth-container {
@@ -256,15 +288,42 @@
             }
             
             .modal-content {
-                padding: 20px 15px;
+                padding: 15px 10px;
+                max-height: 98vh;
+            }
+            
+            .modal-title {
+                font-size: 1.1rem;
             }
             
             .start-title {
-                font-size: 1.5rem !important;
+                font-size: 1rem !important;
+                padding: 0 8px;
+                line-height: 1.2 !important;
             }
             
             .start-text {
-                font-size: 1.2rem !important;
+                font-size: 0.85rem !important;
+                padding: 0 8px;
+                line-height: 1.3 !important;
+            }
+            
+            .photobooth-start-screen {
+                padding: 15px 8px !important;
+            }
+            
+            .coin-svg-toss {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .photos-strip {
+                max-width: 140px;
+            }
+            
+            .photos-strip-text {
+                font-size: 0.7rem;
+                padding: 12px 4px;
             }
         }
 
@@ -1300,9 +1359,9 @@
                         <div class="photobooth-container">
                             <!-- Начальный экран -->
                             <div class="photobooth-start-screen" id="pb-start">
-                                <h2 class="start-title">А сейчас время для общего фото!</h2>
+                                <h2 class="start-title">А сейчас время<br>для общего фото!</h2>
                                 <div class="start-heart">♡</div>
-                                <p class="start-text">Соберитесь все вместе и киньте монетку, когда будете готовы</p>
+                                <p class="start-text">Соберитесь все вместе<br>и киньте монетку,<br>когда будете готовы</p>
                                 <div class="coin-toss-container">
                                     <div class="coin-toss" id="coin-toss" onclick="tossCoin()">
                                         <svg class="coin-svg-toss" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
