@@ -1485,16 +1485,31 @@
                     rutubeContainer.innerHTML = `
                         ${giftData.content}
                         <div class="rutube-wrapper">
+                            <img src="5.jpg" alt="Заставка видео" class="rutube-poster" onclick="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <iframe 
-                                src="${embedUrl}" 
+                                src="" 
+                                data-src="${embedUrl}"
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                 allowfullscreen
-                                loading="lazy">
+                                loading="lazy"
+                                style="display: none;">
                             </iframe>
                         </div>
                     `;
-                    if (modalBody) modalBody.appendChild(rutubeContainer);
+                    if (modalBody) {
+                        modalBody.appendChild(rutubeContainer);
+                        // Загружаем iframe при клике на постер
+                        const poster = rutubeContainer.querySelector('.rutube-poster');
+                        const iframe = rutubeContainer.querySelector('iframe');
+                        if (poster && iframe) {
+                            poster.addEventListener('click', function() {
+                                this.style.display = 'none';
+                                iframe.style.display = 'block';
+                                iframe.src = iframe.getAttribute('data-src');
+                            });
+                        }
+                    }
                 } else if (giftData.type === 'youtube' && giftData.youtubeId) {
                     const youtubeContainer = document.createElement('div');
                     youtubeContainer.className = 'youtube-container';
