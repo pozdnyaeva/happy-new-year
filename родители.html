@@ -1637,6 +1637,13 @@
                     video.pause();
                     video.currentTime = 0;
                 }
+                
+                // Останавливаем RuTube/YouTube видео (iframe)
+                const iframe = modalBody.querySelector('iframe');
+                if (iframe) {
+                    // Останавливаем воспроизведение, изменяя src на пустую строку
+                    iframe.src = '';
+                }
             }
             
             // Останавливаем фотобудку
