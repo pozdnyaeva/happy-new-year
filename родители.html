@@ -6,8 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Новогодний сайт с подарками, фотобудкой и поздравлениями" />
     <title>Новогоднее чудо</title>
+    <!-- Resource hints для быстрой загрузки -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://rutube.ru">
+    <!-- Preload критических ресурсов -->
+    <link rel="preload" href="3.png" as="image" fetchpriority="high">
+    <link rel="preload" href="static/PlaypenSans-ExtraLight.ttf" as="font" type="font/ttf" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet"></noscript>
     <style>
@@ -1361,7 +1367,7 @@
     <div class="scene">
         <!-- Ёлка -->
         <div class="tree">
-            <img src="3.png" alt="Новогодняя ёлка" loading="eager" fetchpriority="high">
+            <img src="3.png" alt="Новогодняя ёлка" loading="eager" fetchpriority="high" decoding="sync">
         </div>
 
         <!-- Подарки -->
@@ -1371,16 +1377,16 @@
                 <div class="hint-box">
                     <div class="hint-text">жмите на<br>подарочки</div>
                     <div class="arrow-to-gift">
-                        <img src="4.png" alt="Стрелка" loading="lazy">
+                        <img src="4.png" alt="Стрелка" loading="lazy" decoding="async">
                     </div>
                 </div>
                 <img src="2.png" alt="Подарок 1" loading="lazy">
             </div>
             <div class="gift" onclick="openModal(2)">
-                <img src="2.png" alt="Подарок 2" loading="lazy">
+                <img src="2.png" alt="Подарок 2" loading="lazy" decoding="async">
             </div>
             <div class="gift" onclick="openModal(3)">
-                <img src="2.png" alt="Подарок 3" loading="lazy">
+                <img src="2.png" alt="Подарок 3" loading="lazy" decoding="async">
             </div>
         </div>
     </div>
