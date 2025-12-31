@@ -1459,8 +1459,43 @@
                 // Очищаем предыдущее содержимое
                 if (modalBody) modalBody.innerHTML = '';
                 
-                // Если это YouTube видео
-                if (giftData.type === 'youtube' && giftData.youtubeId) {
+                // Если это RuTube видео
+                if (giftData.type === 'rutube' && giftData.rutubeUrl) {
+                    // Извлекаем ID видео из URL для embed
+                    let embedUrl = '';
+                    if (giftData.rutubeUrl.includes('/video/private/')) {
+                        // Для приватных видео используем полный URL с параметрами
+                        const videoId = giftData.rutubeUrl.match(/\/video\/private\/([^\/\?]+)/)?.[1];
+                        const params = giftData.rutubeUrl.match(/\?p=([^&]+)/)?.[1];
+                        if (videoId && params) {
+                            embedUrl = `https://rutube.ru/play/embed/${videoId}/?p=${params}`;
+                        } else {
+                            embedUrl = giftData.rutubeUrl.replace('/video/', '/play/embed/').replace('/private/', '/');
+                        }
+                    } else {
+                        // Для обычных видео
+                        const videoId = giftData.rutubeUrl.match(/\/video\/([^\/\?]+)/)?.[1];
+                        if (videoId) {
+                            embedUrl = `https://rutube.ru/play/embed/${videoId}/`;
+                        }
+                    }
+                    
+                    const rutubeContainer = document.createElement('div');
+                    rutubeContainer.className = 'rutube-container';
+                    rutubeContainer.innerHTML = `
+                        ${giftData.content}
+                        <div class="rutube-wrapper">
+                            <iframe 
+                                src="${embedUrl}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                    `;
+                    if (modalBody) modalBody.appendChild(rutubeContainer);
+                } else if (giftData.type === 'youtube' && giftData.youtubeId) {
                     const youtubeContainer = document.createElement('div');
                     youtubeContainer.className = 'youtube-container';
                     youtubeContainer.innerHTML = `
