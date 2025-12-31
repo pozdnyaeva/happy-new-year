@@ -1485,7 +1485,7 @@
                         const videoId = giftData.rutubeUrl.match(/\/video\/private\/([^\/\?]+)/)?.[1];
                         const params = giftData.rutubeUrl.match(/\?p=([^&]+)/)?.[1];
                         if (videoId && params) {
-                            embedUrl = `https://rutube.ru/play/embed/${videoId}/?p=${params}`;
+                            embedUrl = `https://rutube.ru/play/embed/${videoId}/?p=${params}&autoplay=1`;
                         } else {
                             embedUrl = giftData.rutubeUrl.replace('/video/', '/play/embed/').replace('/private/', '/');
                         }
@@ -1493,7 +1493,7 @@
                         // Для обычных видео
                         const videoId = giftData.rutubeUrl.match(/\/video\/([^\/\?]+)/)?.[1];
                         if (videoId) {
-                            embedUrl = `https://rutube.ru/play/embed/${videoId}/`;
+                            embedUrl = `https://rutube.ru/play/embed/${videoId}/?autoplay=1`;
                         }
                     }
                     
