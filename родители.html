@@ -633,6 +633,32 @@
             border: none;
         }
 
+        /* RuTube видео */
+        .rutube-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .rutube-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 соотношение сторон */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .rutube-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         /* ФОТОБУДКА */
         .photobooth-container {
             width: 100%;
@@ -1403,10 +1429,10 @@
                 content: '<p>🎁 Это балийский новогодний привет вам от Катюши!</p><p>И пускай я где-то далеко, мне хочется чтобы вы улыбнулись и немного порадовались в эту новогоднюю ночь</p><p>Жмите скорее на второй подарок</p>'
             },
             2: {
-                type: 'youtube',
+                type: 'rutube',
                 title: 'Подарок №2',
                 content: '',
-                youtubeId: 'uipepSexrms'
+                rutubeUrl: 'https://rutube.ru/video/private/b5649100ddd49fad27796090d2afd7ae/?p=cQ3a67u12yKjHBCKBR-qsQ'
             },
             3: {
                 type: 'photobooth',
